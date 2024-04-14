@@ -7,6 +7,53 @@ moves
 */
 
 #include <iostream>
-using namespace std
+using namespace std;
 
-int main()
+//Global constants
+const int MAX = 3;
+//class move
+class Move{
+public:
+	int row,col;
+	Move();
+	void print();
+};
+
+//constructor
+Move::Move() {
+	int grid[MAX][MAX] = { 9 };
+}
+
+//Main function
+int main() {
+	Move moves;
+	int choice ;
+
+	moves.print();
+	cout << "Options" << endl;
+	cout << "1. Select a cell " << endl;
+	cout << "2. Undo " << endl;
+	cout << "3. Redo " << endl;
+	cout << "4. New Game " << endl;
+	cout << "5. Quit " << endl;
+	cin >> choice;
+
+	switch (choice) {
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	case 5:
+		//No code needed
+		break;
+	default:
+		cout << "Invalid choice, please try again " << endl;
+	}
+
+
+	return 0;
+}
