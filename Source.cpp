@@ -13,15 +13,30 @@ using namespace std;
 const int MAX = 3;
 //class move
 class Move{
+	int grid[MAX][MAX];
 public:
-	int row,col;
+	int row =0 ,col=0;
 	Move();
 	void print();
+
 };
 
 //constructor
 Move::Move() {
-	int grid[MAX][MAX] = { 9 };
+	for (int i = 0; i < MAX; i++) {
+		for (int j = 0; j < MAX; j++) {
+			grid[i][j] = 9;
+		}
+	}
+}
+
+void Move::print() {
+	for (int i = 0; i < MAX; i++) {
+		for (int j = 0; j < MAX; j++) {
+			cout << grid[i][j] << ",";
+		}
+		cout << endl;
+	 }
 }
 
 //Main function
