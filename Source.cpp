@@ -7,17 +7,22 @@ moves
 */
 
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
 //Global constants
 const int MAX = 3;
-//class move
+
+
+//Classes
 class Move{
 	int grid[MAX][MAX];
 public:
 	int row =0 ,col=0;
 	Move();
 	void print();
+	void newGame(int const diff);
 
 };
 
@@ -39,11 +44,39 @@ void Move::print() {
 	 }
 }
 
+void Move::newGame(int const diff) {
+	for (int z = 0; z < diff; z++) {
+		row = rand() % 2;
+		col = rand() % 2;
+		for (int i = 0; i < diff; i++) {
+			for (int j = 0; j < diff; j++) {
+				if (i == row) {
+					if (grid[i][j] == 0)
+						grid[i][j] = 9;
+					else
+						grid[i][j]--;
+				}
+				else if (j == col) {
+					if (grid[i][j] == 0)
+						grid[i][j] = 9;
+					else grid[i][j]--;
+				}
+			}
+		}
+	}
+	
+	
+}
+
+
 //Main function
 int main() {
+	srand(time(NULL));
 	Move moves;
-	int choice ;
+	int difficulty = 9; // set to 9 as default beginner level
+	int choice;
 
+	moves.newGame(difficulty);
 	moves.print();
 	cout << "Options" << endl;
 	cout << "1. Select a cell " << endl;
