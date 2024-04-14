@@ -23,6 +23,7 @@ public:
 	Move();
 	void print();
 	void newGame(int const diff);
+	void select();
 
 };
 
@@ -68,6 +69,24 @@ void Move::newGame(int const diff) {
 	
 }
 
+void Move:: select() {
+	for (int i = 0; i < MAX; i++) {
+		for (int j = 0; j < MAX; j++) {
+			if (i == row) {
+				if (grid[i][j] == 9)
+					grid[i][j] = 0;
+				else
+					grid[i][j]++;
+			}
+			else if (j == col) {
+				if (grid[i][j] == 9)
+					grid[i][j] = 0;
+				else grid[i][j]++;
+			}
+		}
+	}
+}
+
 
 //Main function
 int main() {
@@ -77,31 +96,40 @@ int main() {
 	int choice;
 
 	moves.newGame(difficulty);
-	moves.print();
-	cout << "Options" << endl;
-	cout << "1. Select a cell " << endl;
-	cout << "2. Undo " << endl;
-	cout << "3. Redo " << endl;
-	cout << "4. New Game " << endl;
-	cout << "5. Quit " << endl;
-	cin >> choice;
+	do {
+		moves.print();
+		cout << "Options" << endl;
+		cout << "1. Select a cell " << endl;
+		cout << "2. Undo " << endl;
+		cout << "3. Redo " << endl;
+		cout << "4. New Game " << endl;
+		cout << "5. Quit " << endl;
+		cin >> choice;
 
-	switch (choice) {
-	case 1:
-		break;
-	case 2:
-		break;
-	case 3:
-		break;
-	case 4:
-		break;
-	case 5:
-		//No code needed
-		break;
-	default:
-		cout << "Invalid choice, please try again " << endl;
-	}
+		switch (choice) {
+		case 1:
+			cout << "Please enter row and column (0 based) " << endl;
+			cin >> moves.row >> moves.col;
 
+			moves.select();
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			cout << "Please choose level of difficulty (9-1)-->" << endl;
+			cin >> difficulty;
+
+			moves.newGame(difficulty);
+			break;
+		case 5:
+			//No code needed
+			break;
+		default:
+			cout << "Invalid choice, please try again " << endl;
+		}
+	} while (choice != 5);
 
 	return 0;
 }
