@@ -9,6 +9,7 @@ moves
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <stack>
 using namespace std;
 
 //Global constants
@@ -37,7 +38,9 @@ Move::Move() {
 }
 
 void Move::print() {
+	cout << " |0|1|2 "<<endl;
 	for (int i = 0; i < MAX; i++) {
+		cout << i << "|";
 		for (int j = 0; j < MAX; j++) {
 			cout << grid[i][j] << ",";
 		}
@@ -91,14 +94,18 @@ void Move:: select() {
 //Main function
 int main() {
 	srand(time(NULL));
-	Move moves;
-	int difficulty = 9; // set to 9 as default beginner level
+	Move moves;		//object
+	int difficulty = 1; // set to 9 as default beginner level
 	int choice;
+
+	//Stack
+	stack <Move> move;  //create an empty stack for Moves
+	Move temp;
 
 	moves.newGame(difficulty);
 	do {
 		moves.print();
-		cout << "Options" << endl;
+		cout << "\nOptions" << endl;
 		cout << "1. Select a cell " << endl;
 		cout << "2. Undo " << endl;
 		cout << "3. Redo " << endl;
@@ -112,16 +119,27 @@ int main() {
 			cin >> moves.row >> moves.col;
 
 			moves.select();
+			move.push(moves);
 			break;
 		case 2:
+			//@todo undo using stack
+			temp = move.top();
+			move.pop();
+			temp.print();
 			break;
 		case 3:
+			//@todo redo using stack
+			move.push(temp);
+			
 			break;
 		case 4:
 			cout << "Please choose level of difficulty (9-1)-->" << endl;
 			cin >> difficulty;
 
 			moves.newGame(difficulty);
+			while (!move.empty()) {
+				move.pop();
+			}
 			break;
 		case 5:
 			//No code needed
