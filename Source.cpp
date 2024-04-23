@@ -52,8 +52,8 @@ void Move::newGame(int const diff) {
 	for (int z = 0; z < diff; z++) {
 		row = rand() % 2;
 		col = rand() % 2;
-		for (int i = 0; i < diff; i++) {
-			for (int j = 0; j < diff; j++) {
+		for (int i = 0; i < MAX; i++) {
+			for (int j = 0; j < MAX; j++) {
 				if (i == row) {
 					if (grid[i][j] == 0)
 						grid[i][j] = 9;
