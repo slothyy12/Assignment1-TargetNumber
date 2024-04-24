@@ -21,12 +21,20 @@ class Move{
 	int grid[MAX][MAX];
 public:
 	int row =0 ,col=0;
+	int counter = 0;
 	Move();
 	void print();
 	void newGame(int const diff);
 	void select();
-
+	void undo();
+	void redo();
+	bool isSolved();
+	
 };
+
+//Stack
+stack <Move> undoStack;  //create an empty stack for storing each move
+stack <Move> redoStack;	 //empty stack for storing each move that has been undone.
 
 //constructor
 Move::Move() {
@@ -73,6 +81,11 @@ void Move::newGame(int const diff) {
 }
 
 void Move:: select() {
+	Move temp;
+	temp.row = row;
+	temp.col = col;
+	undoStack.push(temp);
+	counter++;
 	for (int i = 0; i < MAX; i++) {
 		for (int j = 0; j < MAX; j++) {
 			if (i == row) {
@@ -90,17 +103,80 @@ void Move:: select() {
 	}
 }
 
+void Move::undo() {
+	Move temp;
+	if (undoStack.empty()) {
+		cout << "No moves to undo " << endl;
+	}
+	else {
+		temp = undoStack.top();
+		undoStack.pop();
+		redoStack.push(temp);
+		counter--;
+		for (int i = 0; i < MAX; i++) {
+			for (int j = 0; j < MAX; j++) {
+				if (i == temp.row) {
+					if (grid[i][j] == 0)
+						grid[i][j] = 9;
+					else
+						grid[i][j]--;
+				}
+				else if (j == temp.col) {
+					if (grid[i][j] == 0)
+						grid[i][j] = 9;
+					else grid[i][j]--;
+				}
+			}
+		}
+	}
+}
+
+void Move::redo() {
+	Move temp;
+	if (redoStack.empty()) {
+		cout << " No moves to redo " << endl;
+	}
+	else {
+		temp = redoStack.top();
+		redoStack.pop();
+		undoStack.push(temp);
+		counter++;
+		for (int i = 0; i < MAX; i++) {
+			for (int j = 0; j < MAX; j++) {
+				if (i == temp.row) {
+					if (grid[i][j] == 9)
+						grid[i][j] = 0;
+					else
+						grid[i][j]++;
+				}
+				else if (j == temp.col) {
+					if (grid[i][j] == 9)
+						grid[i][j] = 0;
+					else grid[i][j]++;
+				}
+			}
+		}
+	}
+	
+  }
+
+bool Move:: isSolved() {
+	bool flag = true;
+	for (int i = 0; i < MAX; i++) {
+		for (int j = 0; j < MAX; j++) {
+			if (grid[i][j] != 9)
+				flag = false;
+		}
+	}
+	return flag;
+}
 
 //Main function
 int main() {
 	srand(time(NULL));
 	Move moves;		//object
-	int difficulty = 1; // set to 9 as default beginner level
+	int difficulty = 3; // set to 9 as default beginner level
 	int choice;
-
-	//Stack
-	stack <Move> move;  //create an empty stack for Moves
-	Move temp;
 
 	moves.newGame(difficulty);
 	do {
@@ -119,17 +195,16 @@ int main() {
 			cin >> moves.row >> moves.col;
 
 			moves.select();
-			move.push(moves);
+			
 			break;
 		case 2:
 			//@todo undo using stack
-			temp = move.top();
-			move.pop();
-			temp.print();
+			moves.undo();
+			
 			break;
 		case 3:
 			//@todo redo using stack
-			move.push(temp);
+			moves.redo();
 			
 			break;
 		case 4:
@@ -137,9 +212,14 @@ int main() {
 			cin >> difficulty;
 
 			moves.newGame(difficulty);
-			while (!move.empty()) {
-				move.pop();
+			while (!undoStack.empty()) {
+				undoStack.pop();
 			}
+
+			while (!redoStack.empty()) {
+				redoStack.pop();
+			}
+
 			break;
 		case 5:
 			//No code needed
@@ -147,7 +227,9 @@ int main() {
 		default:
 			cout << "Invalid choice, please try again " << endl;
 		}
-	} while (choice != 5);
+	} while ((choice != 5) && (!moves.isSolved()));
 
+	cout << "Congratulations, you have solved the game!!" << endl;
+	cout << "You took " << moves.counter << " moves to complete" << endl;
 	return 0;
 }
