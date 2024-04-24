@@ -10,6 +10,7 @@ moves
 #include <cstdlib>
 #include <ctime>
 #include <stack>
+#include <list>
 using namespace std;
 
 //Global constants
@@ -33,8 +34,8 @@ public:
 };
 
 //Stack
-stack <Move> undoStack;  //create an empty stack for storing each move
-stack <Move> redoStack;	 //empty stack for storing each move that has been undone.
+stack <Move,list<Move>> undoStack;  //create an empty stack for storing each move
+stack <Move,list<Move>> redoStack;	 //empty stack for storing each move that has been undone.
 
 //constructor
 Move::Move() {
@@ -198,18 +199,21 @@ int main() {
 			
 			break;
 		case 2:
-			//@todo undo using stack
 			moves.undo();
 			
 			break;
 		case 3:
-			//@todo redo using stack
 			moves.redo();
 			
 			break;
 		case 4:
-			cout << "Please choose level of difficulty (9-1)-->" << endl;
-			cin >> difficulty;
+			do {
+				cout << "Please choose level of difficulty (9-1)-->" << endl;
+				cin >> difficulty;
+				if (difficulty < 1 || difficulty >9) {
+					cout << "Invald difficulty level, Please try again" << endl;
+				}
+			} while (difficulty < 1 || difficulty >9);
 
 			moves.newGame(difficulty);
 			while (!undoStack.empty()) {
@@ -229,7 +233,13 @@ int main() {
 		}
 	} while ((choice != 5) && (!moves.isSolved()));
 
-	cout << "Congratulations, you have solved the game!!" << endl;
-	cout << "You took " << moves.counter << " moves to complete" << endl;
+	if (moves.isSolved()) {
+		cout << "Congratulations, you have solved the game!!" << endl;
+		cout << "You took " << moves.counter << " moves to complete" << endl;
+	}
+	else {
+		cout << "Exiting program" << endl;
+	}
+	
 	return 0;
 }
