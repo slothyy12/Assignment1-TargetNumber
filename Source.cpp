@@ -214,7 +214,8 @@ int main() {
 					cout << "Invald difficulty level, Please try again" << endl;
 				}
 			} while (difficulty < 1 || difficulty >9);
-
+			  
+			//calling new game function
 			moves.newGame(difficulty);
 			while (!undoStack.empty()) {
 				undoStack.pop();
