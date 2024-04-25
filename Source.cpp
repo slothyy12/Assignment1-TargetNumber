@@ -23,6 +23,7 @@ class Move{
 public:
 	int row =0 ,col=0;
 	int counter = 0;
+	Move();
 	void print();
 	void newGame(int const diff);
 	void select();
@@ -36,6 +37,14 @@ public:
 stack <Move,list<Move>> undoStack;  //create an empty stack for storing each move
 stack <Move,list<Move>> redoStack;	 //empty stack for storing each move that has been undone.
 
+//constructor
+Move::Move() {
+	for (int i = 0; i < MAX; i++) {
+		for (int j = 0; j < MAX; j++) {
+			grid[i][j] = 9;
+		}
+	}
+}
 
 void Move::print() {
 	cout << " |0|1|2 "<<endl;
